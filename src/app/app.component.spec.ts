@@ -1,35 +1,51 @@
-import { TestBed } from '@angular/core/testing';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { TestBed, waitForAsync } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+
 import { RouterTestingModule } from '@angular/router/testing';
+import { Storage } from '@ionic/storage-angular';
+
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule
-      ],
-      declarations: [
-        AppComponent
-      ],
-    }).compileComponents();
-  });
 
-  it('should create the app', () => {
+
+  beforeEach(waitForAsync(() => {
+
+    TestBed.configureTestingModule({
+    declarations: [AppComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [RouterTestingModule.withRoutes([]),
+        ReactiveFormsModule],
+    providers: [Storage, provideHttpClient(withInterceptorsFromDi())]
+}).compileComponents();
+  }));
+
+  it('should create the app', waitForAsync(() => {
     const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
+    const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
-  });
+  }));
 
-  it(`should have as title 'RentACar-FrontEnd'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('RentACar-FrontEnd');
-  });
-
-  it('should render title', () => {
+  it('should have menu labels', waitForAsync(() => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
-    const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('RentACar-FrontEnd app is running!');
-  });
+    const app = fixture.nativeElement;
+    const menuItems = app.querySelectorAll('ion-label');
+    expect(menuItems.length).toEqual(10);
+    expect(menuItems[0].textContent).toContain('Map');
+    expect(menuItems[1].textContent).toContain('Properties');
+  }));
+
+  it('should have urls', waitForAsync(() => {
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+    const app = fixture.nativeElement;
+    const menuItems = app.querySelectorAll('ion-item');
+    expect(menuItems.length).toEqual(10);
+    expect(menuItems[0].getAttribute('ng-reflect-router-link')).toEqual('/map');
+    expect(menuItems[1].getAttribute('ng-reflect-router-link')).toEqual('/properties');
+  }));
+
 });

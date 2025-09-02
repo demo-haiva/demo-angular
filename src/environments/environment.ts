@@ -3,7 +3,26 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  api: {
+    server: 'http://localhost:8000/',
+    mapKey: '',
+    googleAuthClientId: '',
+    webSocketUrl: 'ws://localhost:8000/websocket',
+  },
+  map: {
+    // Add the map tiles to show base on theme
+    tiles: {
+      default:
+        'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png?api_key=',
+      dark: 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png?api_key=',
+    },
+  },
+  features: {
+    restrictedMode: false,
+    restrictedHeading: 'Restricted',
+    restrictedMessage: 'This feature is currently disabled in this mode.',
+  },
 };
 
 /*
